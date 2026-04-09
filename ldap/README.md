@@ -2,25 +2,20 @@
 
 - Instalar slapd no centOS 9
 - [Documentação](https://www.ibm.com/docs/pt-br/rpa/23.0.x?topic=ldap-installing-configuring-openldap#installing-openldap-on-linux)
-- Passos
-  - Instale o repositório epel, depois os pacotes
-    ```shell
-    sudo dnf install epel-release
-    sudo dnf -y install openldap openldap-servers openldap-clients
-    ```
-  - Inicie o serviço e liberar firewall
 
-    ```shell
-    sudo systemctl start slapd.service
-    sudo systemctl enable slapd.service
-    sudo firewall-cmd --permanent --add-port=389/tcp --add-port=389/udp
-    sudo firewall-cmd --reload
-    sudo setsebool -P allow_ypbind=1 authlogin_nsswitch_use_ldap=1
-    sudo setsebool -P httpd_can_connect_ldap on
+- Para instalar o slapd, rode o script install-ldap.sh
+- Arquivos de configuração (obs: Arquivos são alterados via ldapmodify)
+- /etc/openldap/slapd.d/cn=config
 
-    ```
+### Configurar LDAP
 
-  - Arquivo de configuração em:
-    ```shell
-    vim /etc/openldap/ldap.conf
-    ```
+- Modificar o mdb com ldapmodify
+  > É necessário cuidado extra com espaços no fim de linha
+
+```shell
+ldapmodify -H ldapi:/// -f db.ldif
+```
+
+### Vagrant
+
+- [Registry](https://portal.cloud.hashicorp.com/vagrant/discover)
