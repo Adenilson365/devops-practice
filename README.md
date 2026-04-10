@@ -21,3 +21,8 @@
 - Índice
 
 1 - [LDAP](./ldap/README.md)
+
+### Shared Documentations
+
+- [Markdown Documentation](https://www.markdownguide.org/cheat-sheet/)
+- [Markdown live Preview](https://markdownlivepreview.com/)

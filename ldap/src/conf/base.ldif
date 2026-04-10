@@ -1,0 +1,47 @@
+dn: dc=knz,dc=dev,dc=br
+dc: knz
+objectClass: top
+objectClass: domain
+
+dn: cn=ldapadm,dc=knz,dc=dev,dc=br
+objectClass: organizationalRole
+cn: ldapadm
+description: LDAP Manager
+
+dn: c=BR,dc=knz,dc=dev,dc=br
+objectClass: country
+c: BR
+
+dn: c=US,dc=knz,dc=dev,dc=br
+objectClass: country
+c: US
+
+dn: o=filial-rs,c=BR,dc=knz,dc=dev,dc=br
+objectClass: organization
+o: filial-RS
+
+dn: o=filial-sp,c=BR,dc=knz,dc=dev,dc=br
+objectClass: organization
+o: filial-SP
+
+dn: ou=Marketing,o=filial-rs,c=BR,dc=knz,dc=dev,dc=br
+objectClass: organizationalUnit
+ou: Marketing
+
+dn: ou=Vendas,o=filial-rs,c=BR,dc=knz,dc=dev,dc=br
+objectClass: organizationalUnit
+ou: Vendas
+
+dn: uid=joao,ou=Marketing,o=filial-rs,c=BR,dc=knz,dc=dev,dc=br
+objectClass: top
+objectClass: account
+objectClass: posixAccount
+objectClass: shadowAccount
+cn: joao
+uid: joao
+uidNumber: 9999
+gidNumber: 100
+homeDirectory: /home/joao
+loginShell: /bin/bash
+gecos: Joao [LDAP]
+userPassword: {crypt}x

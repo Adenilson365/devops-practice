@@ -1,4 +1,4 @@
-dn: olcDatabase={2}mdb, cn=config 
+dn: olcDatabase={2}mdb, cn=config
 changetype: modify
 replace: olcSuffix
 olcSuffix: dc=knz,dc=dev,dc=br 
