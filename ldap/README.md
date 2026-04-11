@@ -1,12 +1,26 @@
 ### LDAP com OpenLDAP
 
-- Instalar slapd no centOS 9
-- [Documentação](https://www.ibm.com/docs/pt-br/rpa/23.0.x?topic=ldap-installing-configuring-openldap#installing-openldap-on-linux)
-- [Documentação Opeldap](https://www.openldap.org/doc/)
+#
 
-- Para instalar o slapd, rode o script install-ldap.sh
-- Arquivos de configuração (obs: Arquivos são alterados via ldapmodify)
-- /etc/openldap/slapd.d/cn=config
+### Objetivo
+
+- Adquirir um conhecimento de base sobre LDAP, compreender seu funcionamento e cria rum laboratório sobre para fixar conceitos.
+- Não tem intenção de se tornar admin de ldap
+- Gerar melhor entendimento para facilitar uso e integração com outros sistemas de autenticação
+- Diferenciar suas funcionalidades
+- Fortalecer os conceitos de Autorização e Autenticação.
+
+#
+
+- Instalar slapd no centOS 9
+  - [Documentação](https://www.ibm.com/docs/pt-br/rpa/23.0.x?topic=ldap-installing-configuring-openldap#installing-openldap-on-linux)
+  - [Documentação Opeldap](https://www.openldap.org/doc/)
+
+  - Para instalar o slapd, rode o script install-ldap.sh
+  - Arquivos de configuração (obs: Arquivos são alterados via ldapmodify)
+  - /etc/openldap/slapd.d/cn=config
+
+#
 
 ### Configurar LDAP
 

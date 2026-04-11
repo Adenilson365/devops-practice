@@ -1,0 +1,6 @@
+dn: cn=weblogic-second,dc=knz,dc=dev,dc=br
+objectClass: simpleSecurityObject
+objectClass: organizationalRole
+cn: weblogic-second
+description: WebLogic Bind User B
+userPassword: {SSHA}HASH_B

@@ -1,0 +1,5 @@
+dn: cn=weblogic-users,dc=knz,dc=dev,dc=br
+objectClass: top
+objectClass: groupOfNames
+cn: weblogic-users
+member: cn=ldapadm,dc=knz,dc=dev,dc=br

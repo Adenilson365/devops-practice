@@ -1,0 +1,4 @@
+dn: cn=weblogic-users,dc=knz,dc=dev,dc=br
+changetype: modify
+add: member
+member: uid=joao,ou=Marketing,o=filial-rs,c=BR,dc=knz,dc=dev,dc=br

@@ -1,0 +1,5 @@
+olcAccess: {1}to *
+  by dn.exact="cn=weblogic-bind-a,dc=knz,dc=dev,dc=br" read
+  by dn.exact="cn=weblogic-bind-b,dc=knz,dc=dev,dc=br" read
+  by dn.exact="cn=ldapadm,dc=knz,dc=dev,dc=br" write
+  by * none

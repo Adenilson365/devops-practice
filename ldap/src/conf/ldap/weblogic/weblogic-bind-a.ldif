@@ -1,0 +1,6 @@
+dn: cn=weblogic,dc=knz,dc=dev,dc=br
+objectClass: simpleSecurityObject
+objectClass: organizationalRole
+cn: weblogic
+description: WebLogic Bind User A
+userPassword: {SSHA}HASH_A
