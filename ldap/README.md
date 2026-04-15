@@ -41,9 +41,9 @@ ldapmodify -H ldapi:/// -f monitor.ldif
 - Importar os schemas:
 
 ```shell
-ldapadd -H ldapi:/// -f cosine.ldif
-ldapadd -H ldapi:/// -f inetorgperson.ldif
-ldapadd -H ldapi:/// -f nis.ldif
+ldapadd -H ldapi:/// -f /etc/openldap/schema/cosine.ldif
+ldapadd -H ldapi:/// -f /etc/openldap/schema/inetorgperson.ldif
+ldapadd -H ldapi:/// -f /etc/openldap/schema/nis.ldif
 
 ```
 

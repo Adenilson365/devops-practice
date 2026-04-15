@@ -1,14 +1,14 @@
-dn: olcDatabase={2}mdb, cn=config
+dn: olcDatabase={2}mdb,cn=config
 changetype: modify
 replace: olcSuffix
-olcSuffix: dc=knz,dc=dev,dc=br 
+olcSuffix: dc=knz,dc=dev,dc=br
 
-dn: olcDatabase={2}mdb,cn=config 
-changetype: modify 
-replace: olcRootDN 
+dn: olcDatabase={2}mdb,cn=config
+changetype: modify
+replace: olcRootDN
 olcRootDN: cn=ldapadm,dc=knz,dc=dev,dc=br 
 
 dn: olcDatabase={2}mdb,cn=config
 changetype: modify
-replace: olcRootPW 
+replace: olcRootPW
 olcRootPW: <inserir_hash>
