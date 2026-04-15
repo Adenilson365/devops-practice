@@ -51,9 +51,17 @@ ldapadd -H ldapi:/// -f /etc/openldap/schema/nis.ldif
 
 ```shell
 ldapadd -x -W -D "cn=ldapadm,dc=knz,dc=dev,dc=br" -f base.ldif
-# x -> senha comum
+
 # W -> Aceitar a senha no shell
 # D -> Passar o dn do usuário root do ldap
+```
+
+- Adicionar user-groups
+
+```shell
+ldapmodify -H ldapi:/// -f acl.ldif
+ldapadd -H ldapi:/// -f group.ldif
+ldapadd -H ldapi:/// -f add-member-to-group.ldif
 ```
 
 - Criar Senha usuário joao
