@@ -25,7 +25,10 @@
 ### Configurar LDAP
 
 - Modificar o mdb com ldapmodify
+
   > É necessário cuidado extra com espaços no fim de linha
+
+- É necessário gerar o hash da senha para preencher o dbldif com: `slappasswd`
 
 ```shell
 ldapmodify -H ldapi:/// -f db.ldif
