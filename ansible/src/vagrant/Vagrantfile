@@ -1,0 +1,63 @@
+Vagrant.configure("2") do |config|
+  pubkey_path = ENV.fetch("PUBKEY_PATH", File.expand_path("/home/adenilson/.ssh/id_rsa.pub", __dir__))
+  pubkey = File.exist?(pubkey_path) ? File.read(pubkey_path).strip : ""
+  raise "Public key not found or empty: #{pubkey_path}" if pubkey.empty?
+
+  bridge_iface = ENV.fetch("VAGRANT_BRIDGE", "enp2s0")
+
+  config.vm.box = "ubuntu/jammy64"
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+  config.ssh.insert_key = false
+
+  add_pubkey = <<-SHELL
+    set -e
+
+    USER=vagrant
+    HOME_DIR=/home/$USER
+    SSH_DIR=$HOME_DIR/.ssh
+    AUTH_KEYS=$SSH_DIR/authorized_keys
+
+    mkdir -p "$SSH_DIR"
+    chmod 700 "$SSH_DIR"
+    touch "$AUTH_KEYS"
+    chmod 600 "$AUTH_KEYS"
+    chown -R "$USER:$USER" "$SSH_DIR"
+
+    KEY='#{pubkey.gsub("'", %q('"'"'))}'
+
+    grep -qxF "$KEY" "$AUTH_KEYS" || echo "$KEY" >> "$AUTH_KEYS"
+  SHELL
+
+  nodes = {
+    "ansible-control" => {
+      ip: "192.168.200.210",
+      memory: 1024,
+      cpus: 1
+    },
+    "ansible-node01" => {
+      ip: "192.168.200.211",
+      memory: 1024,
+      cpus: 1
+    }
+  }
+
+  nodes.each do |name, opts|
+    config.vm.define name do |node|
+      node.vm.hostname = "#{name}.local"
+
+      node.vm.network "public_network",
+        bridge: bridge_iface,
+        ip: opts[:ip]
+
+      node.vm.provision "shell",
+        privileged: true,
+        inline: add_pubkey
+
+      node.vm.provider "virtualbox" do |vb|
+        vb.name = name
+        vb.memory = opts[:memory]
+        vb.cpus = opts[:cpus]
+      end
+    end
+  end
+end

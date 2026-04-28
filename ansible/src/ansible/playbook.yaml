@@ -1,0 +1,46 @@
+---
+- name: Create users and groups
+  hosts: webservers
+  become: true
+  vars:
+    nome_usuario: nginx
+  vars_files:
+    - vars.yaml
+  tasks:
+    - name: Ensure group "nginx" exists
+      ansible.builtin.group:
+        name: "{{ nome_usuario }}"
+        state: present
+    - name: create nginx user and group
+      ansible.builtin.user:
+        name: "{{ nome_usuario }}"
+        group: "{{ group_user }}"
+        createhome: no
+        shell: /usr/sbin/nologin
+- name: install and configure nginx
+  hosts: webservers
+  become: true
+  vars:
+    nome_usuario: nginx
+  vars_files:
+    - vars.yaml
+  tasks:
+    - name: apt update
+      ansible.builtin.apt:
+        update_cache: yes
+    - name: install nginx
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+    - name: Copy index with owner and permissions
+      ansible.builtin.copy:
+        src: ./index.html
+        dest: /var/www/html/index.html
+        owner: "{{ nome_usuario }}"
+        group: "{{ group_user }}"
+        mode: "0644"
+    - name: ensure nginx is running and enabled
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: yes
