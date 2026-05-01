@@ -5,7 +5,7 @@
   vars:
     nome_usuario: nginx
   vars_files:
-    - vars.yaml
+    - ../vars.yaml
   tasks:
     - name: Ensure group "nginx" exists
       ansible.builtin.group:
@@ -23,7 +23,7 @@
   vars:
     nome_usuario: nginx
   vars_files:
-    - vars.yaml
+    - ../vars.yaml
   tasks:
     - name: apt update
       ansible.builtin.apt:
@@ -34,7 +34,7 @@
         state: present
     - name: Copy index with owner and permissions
       ansible.builtin.copy:
-        src: ./index.html
+        src: ../index.html
         dest: /var/www/html/index.html
         owner: "{{ nome_usuario }}"
         group: "{{ group_user }}"
