@@ -28,10 +28,12 @@
     - name: apt update
       ansible.builtin.apt:
         update_cache: yes
+      tags: apt-update
     - name: install nginx
       ansible.builtin.apt:
         name: nginx
         state: present
+      tags: install-nginx
     - name: Copy index with owner and permissions
       ansible.builtin.copy:
         src: ../index.html
@@ -39,8 +41,10 @@
         owner: "{{ nome_usuario }}"
         group: "{{ group_user }}"
         mode: "0644"
+      tags: copy
     - name: ensure nginx is running and enabled
       ansible.builtin.service:
         name: nginx
         state: started
         enabled: yes
+      tags: service-running

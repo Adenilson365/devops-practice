@@ -1,0 +1,21 @@
+---
+- name: Test playbook with variables
+  hosts: all
+  become: true
+  gather_facts: false
+  vars:
+    nome_usuario: nginx
+    group_user: nginx
+    task_name: Print variables
+    packages:
+      - tcpdump
+      - net-tools
+  tasks:
+    - name: DEBUG | {{task_name}}
+      ansible.builtin.debug:
+        msg: "Nome do usuário: {{ nome_usuario }}, Grupo do usuário: {{ group_user }}"
+    - name: APT | Install packages
+      ansible.builtin.apt:
+        name: "{{ packages }}"
+        state: present
+...

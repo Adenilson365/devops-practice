@@ -1,0 +1,22 @@
+---
+- name: Ansible with conditions example
+  hosts: all
+  become: true
+  gather_facts: true
+  vars:
+    task_name: Task with condition
+    create_file: false
+  tasks:
+    - name: DEBUG | {{ task_name }}
+      ansible.builtin.debug:
+        msg: "This task will only run if the condition is met."
+      when: create_file
+    - name: APT | Uptade if os family is Debian
+      ansible.builtin.apt:
+        update_cache: yes
+      when: ansible_facts["os_family"] == "Debian"
+    - name: DNF | Update if os family is RedHat
+      ansible.builtin.dnf:
+        update_cache: yes
+      when: ansible_facts["os_family"] == "RedHat" and ansible_facts["distribution_major_version"] | int >= 8
+...

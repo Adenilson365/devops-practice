@@ -1,0 +1,15 @@
+---
+- name: Ansible Facts and Variables Example
+  hosts: all
+  become: true
+  gather_facts: true
+  vars:
+    task_name: Print Ansible facts and variables
+  tasks:
+    - name: DEBUG | {{ task_name }}
+      ansible.builtin.debug:
+        msg: "Hostname: {{ ansible_hostname }}, OS Family: {{ ansible_os_family }}"
+    - name: DEBUG | Print Ip address
+      ansible.builtin.debug:
+        msg: "IP Address: {{ ansible_default_ipv4.address }}"
+...

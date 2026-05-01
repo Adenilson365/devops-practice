@@ -22,8 +22,15 @@
 
 ### Comandos
 
-- Rodar comando apt
+- Rodar uma playbook
 
 ```
 ansible-playbook -i hosts.yaml playbook.yaml
+```
+
+- Consultando documentação de algum módulo
+  > Permite consultar a documentação oficial sem sair do terminal, inclusive com exemplos, similar a doc do ansible collectios
+
+```shell
+ansible-doc <modulo>
 ```

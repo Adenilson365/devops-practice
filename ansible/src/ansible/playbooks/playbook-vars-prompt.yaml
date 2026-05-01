@@ -1,0 +1,17 @@
+---
+- name: Ansible Prompting for Variables Example
+  hosts: all
+  become: true
+  gather_facts: false
+  vars_prompt:
+    - name: "nome_usuario"
+      prompt: "Enter the username to create"
+      private: false
+    - name: "group_user"
+      prompt: "Enter the group for the user"
+      private: false
+  tasks:
+    - name: DEBUG | Print prompted variables
+      ansible.builtin.debug:
+        msg: "Nome do usuário: {{ nome_usuario }}, Grupo do usuário: {{ group_user }}"
+...

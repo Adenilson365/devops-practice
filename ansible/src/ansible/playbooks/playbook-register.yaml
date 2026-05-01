@@ -1,0 +1,26 @@
+---
+- name: Working with registered variables
+  hosts: all
+  become: true
+  gather_facts: false
+  vars:
+    task_name: Register variable example
+  tasks:
+    - name: Create a sample file in /tmp
+      ansible.builtin.file:
+        path: /tmp/sample.cfg
+        state: touch
+        mode: "0644"
+        owner: vagrant
+        group: vagrant
+
+    - name: DEBUG | {{ task_name }}
+      ansible.builtin.find:
+        paths: /tmp
+        patterns: "*.cfg"
+      register: debug_output
+    - name: DEBUG | Print registered variable
+      ansible.builtin.debug:
+        msg: "{{ debug_output.files | map(attribute='path')  | default('File not found') }}"
+        #msg: "{{ debug_output.files[0].path | default('File not found') }}"
+...
