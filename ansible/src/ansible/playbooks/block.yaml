@@ -1,0 +1,21 @@
+---
+- name: Example of using blocks in Ansible
+  hosts: all
+  tasks:
+    - name: Block of tasks
+      block:
+        - name: Task 1
+          debug:
+            msg: "This is task 1"
+        - name: Task 2
+          debug:
+            msg: "This is task 2"
+      rescue:
+        - name: Handle failure in block
+          debug:
+            msg: "An error occurred in the block, handling it here"
+      always:
+        - name: Always run this task
+          debug:
+            msg: "This task will always run regardless of block success or failure"
+...

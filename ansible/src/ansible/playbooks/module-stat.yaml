@@ -1,0 +1,19 @@
+---
+- name: Veriy stats os file /etc/hosts
+  hosts: web1
+  become: true
+  tasks:
+    - name: Check file stats for /etc/hosts
+      ansible.builtin.stat:
+        path: /etc/hosts
+      register: file_stats
+    - name: DEBUG | Print file stats
+      ansible.builtin.debug:
+        msg:
+          - "{{ file_stats.stat }}"
+      when: file_stats.stat.exists
+    - name: DEBUG | File does not exist
+      ansible.builtin.debug:
+        msg: "The file /etc/hosts does not exist."
+      when: not file_stats.stat.exists
+...

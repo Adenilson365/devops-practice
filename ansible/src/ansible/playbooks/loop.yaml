@@ -1,0 +1,75 @@
+---
+- name: "Study loop in Ansible"
+  hosts: localhost
+  become: false
+  gather_facts: false
+  vars:
+    task_name: "Loop example"
+    files_to_check:
+      - /etc/passwd
+      - /etc/shadow
+      - /etc/group
+      - /etc/hosts
+  tasks:
+    - name: "Stat a file"
+      ansible.builtin.stat:
+        path: "{{ item }}"
+      register: file_stats
+      loop: "{{ files_to_check }}"
+      tags: simple
+    - name: "DEBUG | {{ task_name }}"
+      ansible.builtin.debug:
+        msg: "Exists: {{ item.stat.exists }}"
+      loop: "{{ file_stats.results }}"
+      tags: simple
+    - name: "Print fruits"
+      ansible.builtin.debug:
+        msg: "Fruit: {{ item }}"
+      loop:
+        - Apple
+        - Banana
+        - Orange
+        - Grape
+      tags: simple
+
+- name: "Complex loops with dictionaries"
+  hosts: localhost
+  become: false
+  gather_facts: false
+  vars:
+    task_name: "Complex loop example"
+    users:
+      - name: alice
+        uid: 1001
+        shell: /bin/bash
+      - name: bob
+        uid: 1002
+        shell: /bin/zsh
+      - name: charlie
+        uid: 1003
+        shell: /bin/sh
+  tasks:
+    - name: "Print user information"
+      ansible.builtin.debug:
+        msg: "User {{ item.name }} has UID {{ item.uid }} and shell {{ item.shell }}"
+      loop: "{{ users }}"
+      tags: complex
+    - name: "Using json objects in loop"
+      ansible.builtin.debug:
+        msg: "User {{ item.name }} has UID {{ item.uid }} and shell {{ item.shell }}"
+      loop:
+        - { name: alice, uid: 1001, shell: /bin/bash }
+        - { name: bob, uid: 1002, shell: /bin/zsh }
+        - { name: charlie, uid: 1003, shell: /bin/sh }
+      tags: complex
+    - name: "Using pause"
+      ansible.builtin.debug:
+        msg: "{{ item }}"
+      loop:
+        - "Exec1"
+        - "Exec2"
+        - "Exec3"
+      loop_control:
+        pause: 5
+      tags: pause
+...

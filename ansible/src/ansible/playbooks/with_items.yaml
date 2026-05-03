@@ -1,0 +1,54 @@
+---
+- name: "Working with items in Ansible"
+  hosts: web1
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Install multiple packages using with_items
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - curl
+        - vim
+        - htop
+
+      tags: simple
+    - name: Create multiple users using with_items
+      ansible.builtin.user:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - user1
+        - user2
+        - user3
+      tags: simple
+    - name: Copy multiple files using with_items
+      ansible.builtin.user:
+        name: "{{ item.name }}"
+        group: "{{ item.group }}"
+        shell: "{{ item.shell }}"
+        createhome: "{{ item.createhome }}"
+        state: present
+      with_items:
+        - {
+            name: "Fulano",
+            group: "admin",
+            shell: "/bin/bash",
+            createhome: yes,
+          }
+        - {
+            name: "Ciclano",
+            group: "admin",
+            shell: "/bin/nologin",
+            createhome: no,
+          }
+        - {
+            name: "Beltrano",
+            group: "admin",
+            shell: "/bin/sh",
+            createhome: yes,
+          }
+
+      tags: complex
+...
