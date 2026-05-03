@@ -1,0 +1,17 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for linux-update
+
+- name: "Update and Upgrade Linux System"
+  ansible.builtin.apt:
+    update_cache: yes
+    upgrade: dist
+  tags: update
+- name: "Remove Unused Packages"
+  ansible.builtin.apt:
+    autoremove: yes
+  tags: cleanup
+- name: "Clean Up Package Cache"
+  ansible.builtin.apt:
+    autoclean: yes
+  tags: cleanup

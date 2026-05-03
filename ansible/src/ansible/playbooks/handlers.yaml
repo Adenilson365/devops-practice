@@ -1,0 +1,23 @@
+---
+- name: "working with handlers in Ansible"
+  hosts: web1
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Install Apache web server
+      ansible.builtin.apt:
+        name: apache2
+        state: present
+        update_cache: yes
+    - name: Stop apache2 service to trigger handler
+      ansible.builtin.service:
+        name: apache2
+        state: stopped
+      notify: Restart Apache
+
+  handlers:
+    - name: Restart Apache
+      ansible.builtin.service:
+        name: apache2
+        state: restarted
+...

@@ -1,0 +1,16 @@
+- name: copyfiles
+  vars:
+    files_to_copy:
+      - file1.txt
+      - file2.txt
+      - files.tar.gz
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "/tmp/{{ item }}"
+  loop: "{{ files_to_copy }}"
+- name: "DEBUG | List of files copied"
+  ansible.builtin.command: "ls -l /tmp/"
+  register: copied_files
+- name: "DEBUG | Print copied files"
+  ansible.builtin.debug:
+    msg: "Copied files: {{ copied_files.stdout }}"

@@ -1,0 +1,4 @@
+#SPDX-License-Identifier: MIT-0
+---
+# vars file for linux-update
+vars_name: "This is a variable for debugging purposes"

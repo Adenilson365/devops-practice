@@ -1,0 +1,17 @@
+---
+- name: "With sequence in Ansible"
+  hosts: web1
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Create multiple users using with_sequence
+      ansible.builtin.debug:
+        msg: "Creating user user{{ item }}"
+      with_sequence: start=1 end=10
+      tags: simple
+    - name: Create multiple users with custom step using with_sequence
+      ansible.builtin.debug:
+        msg: "Creating user user{{ item }}"
+      with_sequence: start=1 end=10 stride=2
+      tags: salt
+...

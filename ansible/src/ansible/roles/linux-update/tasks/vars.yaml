@@ -1,0 +1,3 @@
+- name: DEBUG | Print variables
+  ansible.builtin.debug:
+    msg: "Variable value: {{ vars_name}}"
