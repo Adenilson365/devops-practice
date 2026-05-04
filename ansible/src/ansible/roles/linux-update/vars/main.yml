@@ -2,3 +2,5 @@
 ---
 # vars file for linux-update
 vars_name: "This is a variable for debugging purposes"
+ssh_port: 22
+ssh_permit_root_login: "no"

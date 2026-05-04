@@ -6,4 +6,6 @@
   import_tasks: vars.yaml
 - name: Copy files
   import_tasks: copy.yaml
+- name: template files
+  import_tasks: template.yaml
 ...
