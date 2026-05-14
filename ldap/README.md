@@ -91,6 +91,12 @@ ldapwhoami -x -D "uid=joao,ou=Marketing,o=filial-rs,c=BR,dc=knz,dc=dev,dc=br" -W
 #saida esperada: dn:uid=joao,ou=Marketing,o=filial-rs,c=BR,dc=knz,dc=dev,dc=br
 ```
 
+- Alterar senda do usuário
+
+```
+ldappasswd -x   -H ldapi:///   -D "cn=ldapadm,dc=knz,dc=dev,dc=br"   -W   -s 'weblogic-second'   "cn=weblogic-second,dc=knz,dc=dev,dc=br"
+```
+
 ### Denbian-Client
 
 - Instale com os comandos do install-client.sh
