@@ -1,6 +1,3 @@
-# Vagrantfile - 3 VMs zeradas para instalação manual do kubeadm
-# Objetivo de ter as VMs acessíveis via SSH, mas para instalação manual do kubeadm e com recursos mínimos sem precisar se preocupar com SO.
-# Isso facilita criar e destruir infra local e focar no aprendizado do Kubernetes.
 
 PUBKEY_PATH = File.expand_path("~/.ssh/id_rsa.pub")
 PUBKEY      = File.exist?(PUBKEY_PATH) ? File.read(PUBKEY_PATH).strip : ""
@@ -55,3 +52,4 @@ Vagrant.configure("2") do |config|
 
 
 end
+
