@@ -6,11 +6,13 @@ export DEBIAN_FRONTEND=noninteractive
 BIND_VERSION="9.20.23"
 BUILD_DIR="/bind9"
 
+sudo groupadd --system named || true
+
 sudo useradd \
   --system \
   --home-dir /var/lib/named \
   --shell /usr/sbin/nologin \
-  --gid named named
+  --gid named named  || true
 
 sudo mkdir -p /etc/bind/zones
 sudo mkdir -p /var/cache/bind
@@ -77,16 +79,45 @@ include "/etc/bind/named.conf.options";
 include "/etc/bind/named.conf.local";
 EOF
 
+## Create the named.conf.local file with zone configurations
 sudo tee /etc/bind/named.conf.local >/dev/null <<'EOF'
 // Insert zone configurations here
+zone "ade.local" {
+    type master;
+    file "/etc/bind/zones/db.ade.local";
+};
+EOF
+
+# Create the zone file for ade.local 
+sudo tee /etc/bind/zones/db.ade.local >/dev/null <<'EOF'
+$TTL 86400
+
+@   IN  SOA ns1.ade.local. admin.ade.local. (
+        2026061901 ; Serial
+        3600       ; Refresh
+        1800       ; Retry
+        604800     ; Expire
+        86400      ; Negative Cache TTL
+)
+
+; Name server da zona
+@       IN  NS      ns1.ade.local.
+
+; Servidor DNS
+ns1     IN  A       192.168.56.53
+
+; Apache
+@       IN  A       192.168.56.51
+www     IN  A       192.168.56.51
+apache  IN  A       192.168.56.51
+
 EOF
 
 sudo tee /etc/bind/named.conf.options >/dev/null <<'EOF'
 options {
     directory "/var/cache/bind";
 
-    listen-on {
-        127.0.0.1;
+    listen-on port 53{
         any;
     };
 
@@ -130,7 +161,9 @@ Wants=network-online.target
 Type=notify
 User=named
 Group=named
-
+AmbientCapabilities=CAP_NET_BIND_SERVICE
+CapabilityBoundingSet=CAP_NET_BIND_SERVICE
+NoNewPrivileges=true
 RuntimeDirectory=named
 RuntimeDirectoryMode=0755
 
@@ -145,6 +178,7 @@ LimitNOFILE=65536
 
 [Install]
 WantedBy=multi-user.target
+Alias=bind9.service
 EOF
 
 
