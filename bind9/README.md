@@ -25,3 +25,13 @@ In this section, I want to learn about bind9 DNS service and through hands-on pr
 ```
 
 > DNS Tree start with "." (dot) as a root node, on domain notation it is omitted, but in FQDN notation must write it.
+
+### How to configure this lab
+
+- Execute `vagrant up` and it create 3 Vm's
+  - 1. bind9 - DNS server
+    - Execute bind9_install.sh
+  - 2. client
+    - Execute client_configure.sh
+  - 3. apache2 server
+    - Execute apache2_install.sh
