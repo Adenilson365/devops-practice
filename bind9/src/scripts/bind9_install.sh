@@ -82,18 +82,18 @@ EOF
 ## Create the named.conf.local file with zone configurations
 sudo tee /etc/bind/named.conf.local >/dev/null <<'EOF'
 // Insert zone configurations here
-zone "ade.local" {
+zone "ade.test" {
     type master;
-    file "/etc/bind/zones/db.ade.local";
+    file "/etc/bind/zones/db.ade.test";
 };
 EOF
 
-# Create the zone file for ade.local 
-sudo tee /etc/bind/zones/db.ade.local >/dev/null <<'EOF'
+# Create the zone file for ade.test 
+sudo tee /etc/bind/zones/db.ade.test >/dev/null <<'EOF'
 $TTL 86400
 
-@   IN  SOA ns1.ade.local. admin.ade.local. (
-        2026061901 ; Serial
+@   IN  SOA ns1.ade.test. admin.ade.test. (
+        2026061901 ; Serial  ; Control versioning of the zone file yyyymmddnn
         3600       ; Refresh
         1800       ; Retry
         604800     ; Expire
@@ -101,7 +101,7 @@ $TTL 86400
 )
 
 ; Name server da zona
-@       IN  NS      ns1.ade.local.
+@       IN  NS      ns1.ade.test.
 
 ; Servidor DNS
 ns1     IN  A       192.168.56.53
@@ -109,7 +109,7 @@ ns1     IN  A       192.168.56.53
 ; Apache
 @       IN  A       192.168.56.51
 www     IN  A       192.168.56.51
-apache  IN  A       192.168.56.51
+
 
 EOF
 

@@ -12,6 +12,7 @@ In this section, I want to learn about bind9 DNS service and through hands-on pr
 - [Build bind9](https://kb.isc.org/docs/aa-00768)
 - [DNS root-servers](https://root-servers.org/)
 - [ICCAN](https://www.icann.org/)
+- [Webmin](https://webmin.com/docs/modules/bind-dns-server/#using-dig)
 
 ### Domain tree structure diagram
 

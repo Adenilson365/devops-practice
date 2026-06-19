@@ -14,7 +14,8 @@ Vagrant.configure("2") do |config|
   nodes = [
     { name: "bind9", ip: "192.168.56.53", mem: 2048, cpu: 2 },
     { name: "client", ip: "192.168.56.50", mem: 2048, cpu: 1 },
-    { name: "apache2", ip: "192.168.56.51", mem: 2048, cpu: 1 }
+    { name: "apache", ip: "192.168.56.51", mem: 1024, cpu: 1 },
+    { name: "apache1", ip: "192.168.56.52", mem: 1024, cpu: 1 }
   ]
 
   nodes.each do |node|

@@ -1,0 +1,20 @@
+$TTL 86400
+
+@   IN  SOA ns1.ade.test. admin.ade.test. (
+        2026061901 ; Serial ;Control versioning of the zone file yyyymmddnn
+        3600       ; Refresh
+        1800       ; Retry
+        604800     ; Expire
+        86400      ; Negative Cache TTL
+)
+
+; Name server da zona
+@       IN  NS      ns1.ade.test.
+
+; Servidor DNS
+ns1     IN  A       192.168.56.53
+
+; Apache
+@       IN  A       192.168.56.51
+www     IN  A       192.168.56.51
+apache  IN  A       192.168.56.51

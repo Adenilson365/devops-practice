@@ -1,0 +1,19 @@
+$TTL 3600
+
+@   IN  SOA ns1.apache.test. admin.apache.test. (
+        2026061901 ; Serial
+        3600       ; Refresh
+        1800       ; Retry
+        604800     ; Expire
+        86400      ; Negative Cache TTL
+)
+
+; Name server da zona
+@       IN  NS      ns1.apache.test.
+
+; Servidor DNS
+ns1     IN  A       192.168.56.53
+
+; Apache
+@       IN  A       192.168.56.52
+www     IN  A       192.168.56.52
