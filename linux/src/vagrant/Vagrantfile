@@ -15,7 +15,8 @@ Vagrant.configure("2") do |config|
   config.vm.synced_folder ".", "/vagrant", disabled: true
 
   nodes = [
-    { name: "debian", ip: "192.168.56.22", mem: 4096, cpu: 4 },
+    { name: "debian", ip: "192.168.56.22", mem: 2048, cpu: 2 },
+    { name: "nfs", ip: "192.168.56.32", mem: 2048, cpu: 2 },
   ]
 
   nodes.each do |node|
@@ -43,7 +44,7 @@ Vagrant.configure("2") do |config|
         touch "$AUTH_KEYS"
         chmod 600 "$AUTH_KEYS"
         chown -R "$USER:$USER" "$SSH_DIR"
-        echo "127.0.1.1 debian" >> /etc/hosts
+        echo "127.0.1.1 #{node[:name]}" >> /etc/hosts
 
         KEY='#{PUBKEY.gsub("'", %q('"'"'))}'
 
