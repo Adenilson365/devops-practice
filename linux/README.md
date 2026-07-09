@@ -37,3 +37,9 @@
 ## Service - Systemd units
 
 [Service Section](./src/service/README.md)
+
+## sysstat
+
+> Utilitário/servico que permite análisar recursos do SO
+
+- Habilitar coleta de dados altere `ENABLED="true"` em `/etc/default/sysstat`
