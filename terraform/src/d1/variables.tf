@@ -4,10 +4,14 @@ variable "name_string" {
   default     = "default_name"
 }
 
-variable "content_numer" {
+variable "content_number" {
   description = "Aceita apenas numeros, inteiros ou decimais"
   type        = number
-  default     = 1
+  default     = 0
+  validation {
+    condition =  var.content_number > 0
+    error_message = "O valor da variável content_number deve ser um número maior que zero."
+  }
 
 }
 
@@ -58,3 +62,12 @@ variable "content_tuple" {
   type        = tuple([string, number, bool])
   default     = ["vm1", 2, true]
 }
+
+variable "content_sensitive" {
+  description = "Aceita qualquer tipo de valor, mas é sensível a dados confidenciais"
+  type        = string
+  default     = "Password_default"
+  sensitive   = true
+
+}
+

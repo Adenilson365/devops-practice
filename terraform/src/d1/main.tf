@@ -4,6 +4,11 @@ resource "local_file" "bool_example" {
   filename = "${path.module}/files/${var.name_string}_bool.txt"
 }
 
+resource "local_file" "number_example" {
+  content  = var.content_number
+  filename = "${path.module}/files/${var.name_string}_number.txt"
+}
+
 resource "local_file" "list_example" {
   content  = join("\n", var.content_list)
   filename = "${path.module}/files/${var.name_string}_list.txt"
@@ -28,3 +33,9 @@ resource "local_file" "tuple_example" {
   content  = join("\n", [var.content_tuple[0], var.content_tuple[1], var.content_tuple[2]])
   filename = "${path.module}/files/${var.name_string}_tuple.txt"
 }
+
+resource "local_file" "sensitive_example" {
+  content  = var.content_sensitive
+  filename = "${path.module}/files/${var.name_string}_sensitive.txt"
+}
+

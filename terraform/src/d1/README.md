@@ -83,3 +83,38 @@ provider "registry.terraform.io/hashicorp/local" {
 ```
 
 - Terraform generally select the newest version available that satisfies all constraints
+
+### Variables
+
+[Documentation](https://developer.hashicorp.com/terraform/language/values/variables)
+
+- We can pass variable with Terraform CLI, as below
+
+```
+terraform apply -var="instance_type=t3.medium" -var="environment=prod"
+terraform apply -var='subnet_ids=["subnet-12345","subnet-67890"]'
+```
+
+- Pass var-file
+
+```
+terraform apply -var-file="production.auto.tfvars"
+```
+
+- Export TF_VARS_name_of_variable
+
+```
+export TF_VAR_complex_config='{"key": "value", "list": ["a", "b"]}'
+
+```
+
+- **Variable Precedence**
+- If the same input variable gets a value from multiple sources, Terraform follow an order:
+  | Priority | Source | Example |
+  | -------- | -------------------------------------- | ----------------------------------------------- |
+  | Lowest | `default` in `variable` block | `default = "t3.micro"` |
+  | ↑ | Environment variable `TF_VAR_*` | `TF_VAR_instance_type=t3.small` |
+  | ↑ | `terraform.tfvars` | `instance_type = "t3.medium"` |
+  | ↑ | `terraform.tfvars.json` | JSON equivalent |
+  | ↑ | `*.auto.tfvars` / `*.auto.tfvars.json` | `prod.auto.tfvars` |
+  | Highest | CLI `-var` / `-var-file` | `terraform apply -var="instance_type=t3.large"` |
