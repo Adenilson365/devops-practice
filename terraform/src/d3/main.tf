@@ -53,7 +53,7 @@ resource "aws_instance" "example" {
 
   provisioner "remote-exec" {
       inline = [
-        "sudo cp /home/ec2-user/index.html /var/www/html/index.html",
+        "sudo mv /home/ec2-user/index.html /var/www/html/index.html",
         "sudo systemctl restart httpd",
       ]
     }
@@ -61,8 +61,36 @@ resource "aws_instance" "example" {
     command = "echo ${self.public_ip} > private_ip.txt"
   }
 
+
   tags = {
     Name = "ec2"
     Managed-by = "Terraform"
   }
+
 }
+
+  resource "terraform_data" "index_html" {
+    depends_on = [aws_instance.example]
+    triggers_replace = filesha256("./index.html")
+    
+
+  connection {
+    host        = aws_instance.example.public_ip
+    type        = "ssh"
+    user        = "ec2-user"
+    private_key = file("../kp-linux-dev.pem")
+  }
+
+    provisioner "file" {
+      source      = "./index.html"
+      destination = "/home/ec2-user/index.html"
+    }
+
+    provisioner "remote-exec" {
+      inline = [
+        "sudo mv /home/ec2-user/index.html /var/www/html/index.html",
+        "sudo systemctl restart httpd",
+      ]
+    }
+
+  }
