@@ -118,3 +118,126 @@ export TF_VAR_complex_config='{"key": "value", "list": ["a", "b"]}'
   | ↑ | `terraform.tfvars.json` | JSON equivalent |
   | ↑ | `*.auto.tfvars` / `*.auto.tfvars.json` | `prod.auto.tfvars` |
   | Highest | CLI `-var` / `-var-file` | `terraform apply -var="instance_type=t3.large"` |
+
+### Validação de variáveis
+
+A validação define regras para os valores recebidos por uma variável, como ambientes permitidos, intervalos numéricos e formatos de nomes. Quando uma condição retorna `false`, o Terraform apresenta a mensagem configurada e interrompe a operação. Veja a [documentação oficial de validação](https://developer.hashicorp.com/terraform/language/validate).
+
+#### Estrutura do bloco
+
+O bloco `validation` fica dentro de `variable`. A expressão `condition` deve produzir um booleano, e `error_message` deve explicar o valor esperado:
+
+```hcl
+variable "environment" {
+  description = "Ambiente de execução."
+  type        = string
+  default     = "dev"
+  nullable    = false
+
+  validation {
+    condition     = contains(["dev", "hml", "prd"], var.environment)
+    error_message = "O ambiente deve ser dev, hml ou prd."
+  }
+}
+```
+
+Nesse exemplo, `"dev"` é válido, mas `"prod"` e `"DEV"` são inválidos. A comparação distingue maiúsculas de minúsculas.
+
+| Propriedade | Responsabilidade |
+| --- | --- |
+| `type` | Define o tipo esperado; o Terraform pode realizar conversões compatíveis. |
+| `default` | Fornece um valor quando a entrada é omitida; esse valor também deve atender às regras. |
+| `nullable = false` | Impede que o valor final da variável seja `null`. Com um padrão não nulo, uma entrada `null` utiliza esse padrão. |
+| `validation` | Verifica regras adicionais sobre o valor. |
+
+Declarar `type = string` não impede `""` nem `"   "`. Da mesma forma, `type = number` permite números negativos e decimais. Essas restrições precisam ser expressas na validação. Consulte a [referência do bloco `variable`](https://developer.hashicorp.com/terraform/language/block/variable).
+
+#### Intervalo numérico e múltiplas regras
+
+Uma variável pode ter vários blocos `validation`; todos precisam ser satisfeitos. Separar regras permite fornecer mensagens mais específicas:
+
+```hcl
+variable "replicas" {
+  description = "Quantidade de réplicas da aplicação."
+  type        = number
+  default     = 2
+  nullable    = false
+
+  validation {
+    condition     = var.replicas >= 1 && var.replicas <= 5
+    error_message = "A quantidade de réplicas deve estar entre 1 e 5."
+  }
+
+  validation {
+    condition     = floor(var.replicas) == var.replicas
+    error_message = "A quantidade de réplicas deve ser um número inteiro."
+  }
+}
+```
+
+`3` atende às duas regras; `0` falha no intervalo; `2.5` falha na exigência de inteiro.
+
+#### Strings vazias e formatos
+
+Use `trimspace` com `length` para rejeitar uma entrada vazia ou composta apenas por espaços:
+
+```hcl
+variable "nome" {
+  description = "Nome da aplicação."
+  type        = string
+  nullable    = false
+
+  validation {
+    condition     = length(trimspace(var.nome)) > 0
+    error_message = "O nome deve conter ao menos um caractere diferente de espaço."
+  }
+}
+```
+
+Essa condição verifica o texto sem os espaços das extremidades, mas não modifica o valor de `var.nome`.
+
+Para validar um padrão, combine `regex` com `can`:
+
+```hcl
+variable "permissao" {
+  description = "Permissão octal do arquivo."
+  type        = string
+  default     = "0644"
+  nullable    = false
+
+  validation {
+    condition     = can(regex("^0[0-7]{3}$", var.permissao))
+    error_message = "A permissão deve começar com 0 e conter mais três dígitos de 0 a 7, como 0644."
+  }
+}
+```
+
+`^` e `$` delimitam o início e o fim da string; `[0-7]{3}` exige três dígitos octais. `regex` gera erro quando não encontra correspondência, e `can` converte esse erro em `false`, permitindo apresentar a mensagem da validação. Veja a [documentação de `can`](https://developer.hashicorp.com/terraform/language/functions/can).
+
+`can` verifica se a expressão pode ser avaliada, não se seu resultado é verdadeiro: `can(1 > 2)` retorna `true`. Portanto, use comparações diretamente em `condition`.
+
+#### Operadores úteis
+
+| Operador | Significado | Exemplo |
+| --- | --- | --- |
+| `==` / `!=` | Igual / diferente | `var.environment != "prd"` |
+| `>` / `>=` | Maior / maior ou igual | `var.replicas >= 1` |
+| `<` / `<=` | Menor / menor ou igual | `var.replicas <= 5` |
+| `&&` | As duas condições devem ser verdadeiras | `var.replicas >= 1 && var.replicas <= 5` |
+| `\|\|` | Pelo menos uma condição deve ser verdadeira | `var.environment == "dev" \|\| var.environment == "hml"` |
+| `!` | Nega uma condição | `!contains(["prd"], var.environment)` |
+
+#### Praticando com a variável deste dia
+
+Em [variables.tf](variables.tf), `content_number` exige um valor maior que zero, mas seu `default` atual é `0`. Portanto, o padrão viola a própria regra: informe um valor positivo ou ajuste o padrão para um valor permitido.
+
+No diretório `src/d1`, com as dependências inicializadas, compare:
+
+```bash
+terraform plan -var="content_number=1"
+terraform plan -var="content_number=0"
+```
+
+O primeiro valor atende à regra de `content_number`; o segundo deve apresentar a mensagem `O valor da variável content_number deve ser um número maior que zero.` Isso não garante que o restante da configuração esteja livre de outros erros. Os exemplos de `environment`, `replicas`, `nome` e `permissao` acima são didáticos e não estão declarados nos arquivos `.tf` deste dia.
+
+`terraform validate` verifica a consistência da configuração, mas não substitui `terraform plan` com os valores que serão usados. As regras são avaliadas assim que seus valores estão disponíveis; se uma entrada depender de um resultado ainda desconhecido, sua verificação pode ser adiada. Consulte os [momentos de avaliação das validações](https://developer.hashicorp.com/terraform/language/validate).
