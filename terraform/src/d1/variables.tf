@@ -71,3 +71,12 @@ variable "content_sensitive" {
 
 }
 
+variable "content_regex" {
+  description = "Aceita qualquer tipo de valor, mas não é sensível a dados confidenciais"
+  type        = string
+  default     = "0777"
+  validation {
+    condition = can(regex("^0[0-7]{3}$", var.content_regex))
+    error_message = "O valor da variável content_regex não pode ser vazio."
+  }
+}

@@ -143,12 +143,12 @@ variable "environment" {
 
 Nesse exemplo, `"dev"` é válido, mas `"prod"` e `"DEV"` são inválidos. A comparação distingue maiúsculas de minúsculas.
 
-| Propriedade | Responsabilidade |
-| --- | --- |
-| `type` | Define o tipo esperado; o Terraform pode realizar conversões compatíveis. |
-| `default` | Fornece um valor quando a entrada é omitida; esse valor também deve atender às regras. |
+| Propriedade        | Responsabilidade                                                                                                  |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------- |
+| `type`             | Define o tipo esperado; o Terraform pode realizar conversões compatíveis.                                         |
+| `default`          | Fornece um valor quando a entrada é omitida; esse valor também deve atender às regras.                            |
 | `nullable = false` | Impede que o valor final da variável seja `null`. Com um padrão não nulo, uma entrada `null` utiliza esse padrão. |
-| `validation` | Verifica regras adicionais sobre o valor. |
+| `validation`       | Verifica regras adicionais sobre o valor.                                                                         |
 
 Declarar `type = string` não impede `""` nem `"   "`. Da mesma forma, `type = number` permite números negativos e decimais. Essas restrições precisam ser expressas na validação. Consulte a [referência do bloco `variable`](https://developer.hashicorp.com/terraform/language/block/variable).
 
@@ -196,6 +196,8 @@ variable "nome" {
 
 Essa condição verifica o texto sem os espaços das extremidades, mas não modifica o valor de `var.nome`.
 
+### Regex
+
 Para validar um padrão, combine `regex` com `can`:
 
 ```hcl
@@ -212,20 +214,86 @@ variable "permissao" {
 }
 ```
 
+- sintaxe: `regex("padrão", valor)`, se valor não corresponder ao padrão retorna erro, por isso usamos can, para transformar em true or false.
+- Alguns padrões regex:
+- `^` e `$` delimitam o início e o fim da string
+- ^[a-z0-9-]+$ : aceita letras minúsculas, números, e hífen
+- `+$` uma ou mais caracteres, ou seja, não aceita string vázia
+- `*$` zero ou mais caracteres, ou seja, aceita string vázia.
+- `{n}` - Delimita quantidade de caracteres: `^[0-9]{3}$` três numeros exemplo: `123` passa `62` ou `1254` não.
+  - Precisa inserir os delimitadores, senão aceita valores além:
+
+```sh
+> regex("[0-9]{3}", 1234)
+"123"
+> regex("^[0-9]{3}$", 1234)
+╷
+│ Error: Error in function call
+│
+│   on <console-input> line 1:
+│   (source code not available)
+│
+│ Call to function "regex" failed: pattern did not match any part of the given string.
+```
+
+- `^[a-z0-9-]{3,20}$` - De 3 a 20 caracteres
+- `^app-` - Valores precisa iniciar com `app-`
+- `^app-[a-z0-9-]+$` - Forçar inicar com valor e validar padrão do restante.
+- `-prod$` - Equivalente caso queira que termine com determinado valor
+- `[A-Z]` - Maiúsculas, `[a-z]` - Minúsculas `A-Za-z` - Ambas
+- `.` - Significa qualquer caractere
+- `\` - Escapa caracteres especiais, então para ter `.`, use `\\.` porque em hcl, barra também é especial. exemplo: api.example.com `regex("^.+\\.example\\.com$", var.domain)`
+
+- Exemplo validando região
+
+```json
+variable "aws_region" {
+  type = string
+
+  validation {
+    condition = can(
+      regex("^[a-z]{2}-[a-z]+-[0-9]+$", var.aws_region)
+    )
+
+    error_message = "Região Inválida, deve segui padrão aws exemplo: us-east-1"
+  }
+}
+```
+
+- **Simbolos**
+
+| Regex    | Significado        |
+| -------- | ------------------ |
+| `^`      | início             |
+| `$`      | fim                |
+| `.`      | qualquer caractere |
+| `[abc]`  | a, b ou c          |
+| `[a-z]`  | letra minúscula    |
+| `[A-Z]`  | letra maiúscula    |
+| `[0-9]`  | número             |
+| `+`      | 1 ou mais          |
+| `*`      | 0 ou mais          |
+| `?`      | 0 ou 1             |
+| `{3}`    | exatamente 3       |
+| `{3,10}` | entre 3 e 10       |
+| `\|`     | OU                 |
+| `()`     | agrupa             |
+| `\.`     | ponto literal      |
+
 `^` e `$` delimitam o início e o fim da string; `[0-7]{3}` exige três dígitos octais. `regex` gera erro quando não encontra correspondência, e `can` converte esse erro em `false`, permitindo apresentar a mensagem da validação. Veja a [documentação de `can`](https://developer.hashicorp.com/terraform/language/functions/can).
 
 `can` verifica se a expressão pode ser avaliada, não se seu resultado é verdadeiro: `can(1 > 2)` retorna `true`. Portanto, use comparações diretamente em `condition`.
 
 #### Operadores úteis
 
-| Operador | Significado | Exemplo |
-| --- | --- | --- |
-| `==` / `!=` | Igual / diferente | `var.environment != "prd"` |
-| `>` / `>=` | Maior / maior ou igual | `var.replicas >= 1` |
-| `<` / `<=` | Menor / menor ou igual | `var.replicas <= 5` |
-| `&&` | As duas condições devem ser verdadeiras | `var.replicas >= 1 && var.replicas <= 5` |
-| `\|\|` | Pelo menos uma condição deve ser verdadeira | `var.environment == "dev" \|\| var.environment == "hml"` |
-| `!` | Nega uma condição | `!contains(["prd"], var.environment)` |
+| Operador    | Significado                                 | Exemplo                                                  |
+| ----------- | ------------------------------------------- | -------------------------------------------------------- |
+| `==` / `!=` | Igual / diferente                           | `var.environment != "prd"`                               |
+| `>` / `>=`  | Maior / maior ou igual                      | `var.replicas >= 1`                                      |
+| `<` / `<=`  | Menor / menor ou igual                      | `var.replicas <= 5`                                      |
+| `&&`        | As duas condições devem ser verdadeiras     | `var.replicas >= 1 && var.replicas <= 5`                 |
+| `\|\|`      | Pelo menos uma condição deve ser verdadeira | `var.environment == "dev" \|\| var.environment == "hml"` |
+| `!`         | Nega uma condição                           | `!contains(["prd"], var.environment)`                    |
 
 #### Praticando com a variável deste dia
 
