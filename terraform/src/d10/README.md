@@ -249,4 +249,15 @@ terraform plan
 
 Após concluir, você pode manter o bloco `import` como histórico ou removê-lo; preserve o bloco `resource`, que continua definindo o gerenciamento da EC2. Consulte o [fluxo oficial de importação com bloco `import`](https://developer.hashicorp.com/terraform/language/import/single-resource).
 
-Para revisar os comandos de consulta, veja o [laboratório de Terraform State](../d6-7-8-9/README.md).
+### terraform plan -generate-config-out=import.tf
+
+> Com esse comando consigo gerar o output com as informações sobre o recurso, apartir de um bloco import
+
+```json
+  import {
+    to = aws_instance.import1
+    id = "i-0c028363598d126d8"
+  }
+```
+
+- aplico o comando `terraform plan -generate-config-out=import.tf` no import.tf terei o bloco do recurso com todas as informações.
