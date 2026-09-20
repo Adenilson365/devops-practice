@@ -1,5 +1,15 @@
 # Dias 6 a 9 — Gerenciamento de estado no Terraform
 
+## Core Concepts
+
+[Hashiconf - Applying Graph Theory to Infrastructure as Code ](https://www.youtube.com/watch?v=Ce3RNfRbdZ0)
+
+- Config: Target Reality
+- State: Current Reality
+- Diff: {Config - State}
+- Plan: Presents Diff
+- Apply: Resolves Diff
+
 ## O que é o estado?
 
 O **Terraform State** associa os endereços dos recursos na configuração aos objetos gerenciados pelo Terraform. Também registra atributos e metadados usados para acompanhar esses recursos.
@@ -12,7 +22,7 @@ Por padrão, o estado é armazenado localmente no arquivo `terraform.tfstate`. C
 
 Um backend remoto permite armazenar o estado fora da máquina do desenvolvedor, por exemplo, em um bucket S3. O HCP Terraform também oferece armazenamento remoto de estado. Isso permite que a equipe trabalhe com uma fonte compartilhada de informações sobre os recursos gerenciados.
 
-O armazenamento remoto deve ter controle de acesso e recuperação de versões. O suporte a bloqueio de estado (*state locking*) depende do backend e de sua configuração; quando disponível, ele impede gravações concorrentes que poderiam comprometer o estado.
+O armazenamento remoto deve ter controle de acesso e recuperação de versões. O suporte a bloqueio de estado (_state locking_) depende do backend e de sua configuração; quando disponível, ele impede gravações concorrentes que poderiam comprometer o estado.
 
 Neste laboratório, o `main.tf` não declara um backend remoto: o estado usa o armazenamento local padrão.
 
@@ -20,11 +30,11 @@ Neste laboratório, o `main.tf` não declara um backend remoto: o estado usa o a
 
 Execute os comandos no diretório `src/d6-7-8-9`, após inicializar o laboratório com `terraform init`. Os exemplos de consulta pressupõem que os recursos já foram criados com `terraform apply` e estão registrados no estado selecionado.
 
-| Comando | Finalidade |
-| --- | --- |
-| `terraform state list` | Lista os endereços dos recursos registrados no estado. |
-| `terraform show` | Exibe o último snapshot do estado em formato legível. |
-| `terraform show <arquivo>` | Exibe um arquivo de estado ou um plano salvo. |
+| Comando                             | Finalidade                                                |
+| ----------------------------------- | --------------------------------------------------------- |
+| `terraform state list`              | Lista os endereços dos recursos registrados no estado.    |
+| `terraform show`                    | Exibe o último snapshot do estado em formato legível.     |
+| `terraform show <arquivo>`          | Exibe um arquivo de estado ou um plano salvo.             |
 | `terraform state show '<endereco>'` | Exibe os atributos de uma instância de recurso no estado. |
 
 Esses comandos consultam informações registradas; não atualizam os recursos consultando os providers. Veja a [referência de `terraform show`](https://developer.hashicorp.com/terraform/cli/commands/show).
