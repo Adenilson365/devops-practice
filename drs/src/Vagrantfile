@@ -12,7 +12,7 @@ end
 Vagrant.configure("2") do |config|
   config.vm.box = "lab/debian12-20gb"
   config.ssh.insert_key = false
-  config.vm.synced_folder ".", "/vagrant", disabled: true
+  config.vm.synced_folder "../src", "/scripts", disabled: true
 
   nodes = [
     { name: "source", ip: "192.168.56.22", mem: 2048, cpu: 2 },
@@ -53,9 +53,14 @@ Vagrant.configure("2") do |config|
         # instala pacotes basicos
         apt-get update
         apt-get install -y vim git curl wget net-tools iputils-ping dnsutils unzip
-
+        mkdir -p /scripts
+        chmod 777 /scripts
+        cd /scripts
         #isntala aws cli
-        curl -fsSL https://awscli.amazonaws.com/v2/install.sh | bash
+        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+        unzip awscliv2.zip
+        ./aws/install
+        aws --version
         
       SHELL
     end
