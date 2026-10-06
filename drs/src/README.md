@@ -1,3 +1,6 @@
+<details>
+  <summary><b> AWS-DRS></b></summary>
+
 ### Documentação
 
 - [gcc](https://docs.aws.amazon.com/drs/latest/userguide/agent-install-linux-errors.html#error-gcc-not-found)
@@ -74,37 +77,22 @@ tcpdump -nn port 1500
 ```
 
 - Servidour source foi desligado por 30 minutos, gerando lag
-  ![alt text](image.png)
+  ![alt text](./assets/rep-stalled.png)
 - Rescan após religar
-  ![alt text](image-1.png)
+  ![alt text](./assets/rep-lag.png)
 
-### Recovery e failback
+</details>
+
+<details>
+  <summary><b>Recovery/Failback</b></summary>
+
+# Recovery e failback
+
+- [Failback Pre requisitos](https://docs.aws.amazon.com/drs/latest/userguide/failback-performing.html#failback-performing-prerequesites)
 
 - Ao inicial o recovery inicia um conversion server
-  ![alt text](image-2.png)
+  ![alt text](./assets/rep-conv-server.png)
 
-- Cloud
+### Failback
 
-```sh
-2026-10-04 21:19:29 - CPU: Intel(R)Core(TM)i3-10100FCPU@3.60GHz
-2026-10-04 21:27:47 - CPU: Intel(R)Xeon(R)Platinum8275CLCPU@3.00GHz
-2026-10-04 21:28:47 - CPU: Intel(R)Xeon(R)Platinum8275CLCPU@3.00GHz
-2026-10-04 21:29:47 - CPU: Intel(R)Xeon(R)Platinum8275CLCPU@3.00GHz
-2026-10-04 21:30:47 - CPU: Intel(R)Xeon(R)Platinum8275CLCPU@3.00GHz
-```
-
-- local
-
-```
-2026-10-04 21:13:27 - CPU: Intel(R)Core(TM)i3-10100FCPU@3.60GHz
-2026-10-04 21:14:29 - CPU: Intel(R)Core(TM)i3-10100FCPU@3.60GHz
-2026-10-04 21:15:29 - CPU: Intel(R)Core(TM)i3-10100FCPU@3.60GHz
-2026-10-04 21:16:29 - CPU: Intel(R)Core(TM)i3-10100FCPU@3.60GHz
-2026-10-04 21:17:29 - CPU: Intel(R)Core(TM)i3-10100FCPU@3.60GHz
-2026-10-04 21:18:29 - CPU: Intel(R)Core(TM)i3-10100FCPU@3.60GHz
-2026-10-04 21:19:29 - CPU: Intel(R)Core(TM)i3-10100FCPU@3.60GHz
-2026-10-04 21:32:34 - CPU: Intel(R)Core(TM)i3-10100FCPU@3.60GHz
-2026-10-04 21:33:36 - CPU: Intel(R)Core(TM)i3-10100FCPU@3.60GHz
-```
-
-### Pós-failback
+</details>

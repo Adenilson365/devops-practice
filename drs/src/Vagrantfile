@@ -15,7 +15,8 @@ Vagrant.configure("2") do |config|
   config.vm.synced_folder "../src", "/scripts", disabled: true
 
   nodes = [
-    { name: "source", ip: "192.168.56.22", mem: 2048, cpu: 2 },
+    { name: "source", ip: "192.168.56.22", mem: 6144, cpu: 3 },
+    #{ name: "failback", ip: "192.168.56.23", mem: 2048, cpu: 2 },
   ]
 
   nodes.each do |node|
