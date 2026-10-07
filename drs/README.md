@@ -88,9 +88,32 @@ ssh vagrant@192.168.56.22 'ls -la /scripts'
 - Ao inicial o recovery inicia um conversion server
   ![alt text](./assets/rep-conv-server.png)
 
-### Failback
+## Failback
 
 - On-premisse é iniciado via ISO
   1. Desligue a VM
   2. Monte o ISO e realize o boot pelo ISO
   3. Para VirtualBox, Use os comandos do script `vbox_failback_command.sh`especialmente para o input das credênciais temporárias.
+
+### Erros encontrados durante failback
+
+1. **Erro de conexão**
+   ![](./assets/failback_connect_error.png)
+
+- O Erro foi causado porque a recoveryInstance estava com uma role no profile sem permissão para DRS. Foi possível ver os erros no agent da recovery Instance.
+  - Solução, voltar para role default do DRS.
+
+2. **Replicação em progresso**
+   ![](./assets/failbakc_progress.png)
+
+3. **Erro em investigação**
+   ![](./assets/failback_convertion.png)
+
+> Após finalizar com sucesso o failback, alterar a ordem de boot da VM, o systemd não conseguiu subir a rede. um dos motivos foi que as configurações de rede permaneceram igual a na AWS.
+
+## Cutover
+
+1. **Cutover On-premise -> Cloud**
+   ![alt text](./assets/cutover-onpremisse-cloud.png)
+2. **Cutover Cloud -> On-premise**
+   ![alt text](./assets/cutover-cloud-onpremise.png)
