@@ -10,7 +10,7 @@ locals {
 
 resource "aws_iam_role" "role01" {
   name = "drs-installer-role"
-
+  max_session_duration = 14400
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
 
