@@ -95,7 +95,7 @@ Máscara: 255.255.192.0
 256 - 192 = 64
 ```
 
-Os blocos começam em:
+Os blocos começam em 0 e termina no ultimo valor antes de 255, alteração é no octeto relevante:
 
 ```text
 10.0.0.0/18

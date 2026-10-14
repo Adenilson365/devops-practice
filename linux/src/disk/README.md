@@ -152,7 +152,7 @@
 
 ### Diagrama
 
-![alt text](image.png)
+![alt text](./assets/lvm-diagram.png)
 
 ### Conceitos:
 
