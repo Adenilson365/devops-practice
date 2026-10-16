@@ -5,8 +5,9 @@
 
 ### Documentation
 
-[Systemd Documentation](https://systemd.io/)
-[[YT] What is systemd](https://www.youtube.com/watch?v=TGfXfuC3680&t)
+- [Systemd Documentation](https://systemd.io/)
+- [[YT] What is systemd](https://www.youtube.com/watch?v=TGfXfuC3680&t)
+- [MAN - Systemd Units](https://man7.org/linux/man-pages/man5/systemd.exec.5.html)
 
 ### How to create example service
 

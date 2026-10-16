@@ -3,10 +3,15 @@ Description=Servico para marcar escritas no disco.
 After=network.target
 StartLimitIntervalSec=0
 
+
 [Service]
 Type=simple
-Restart=always
-RestartSec=1
+Restart=on-failure
+RestartSec=5
+CPUQuota=50%
+MemoryMax=100M
+TasksMax=100
+LimitNOFILE=65535
 User=root 
 ExecStart=/usr/bin/env bash /scripts/events.sh 
 
