@@ -169,6 +169,11 @@
    1. É o volume lógico criado apartir do VG e onde montamos o filesystem
 4. Physical Extents (PE) e Logical Extents (LE)
    1. PE (Physical Extent): Unidade de alocação de espaço dentro de um PV
+      1. O LVM enxerga os discos como blocos PE, posso o tamanho dos blocos, mas se for muito grande no fim do disco pode sobrar espaço desperdição.
+         ![alt text](./assets/lvm-pe.png)
+         - `-s <tamanho>` Define o tamanho do PE
+         - O total dos discos era `8GB` com resultado final de `124 blocos` e 7.75GB
+           ![](./assets/lvm-pe2.png)
    2. LE (Logical Extent): Unidade de alocação lógica dentro de um LV
    3. Extent Size: Tamanho da unidade de alocação da VG, frequentemente 4 MiB
    4. Mapeamento: Associação entre extents lógicos e físicos
