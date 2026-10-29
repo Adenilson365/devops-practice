@@ -1,0 +1,27 @@
+services:
+  phpipam-web:
+    image: phpipam/phpipam-www:latest
+    ports:
+      - "3000:80"
+    environment:
+      TZ: America/Sao_Paulo
+      IPAM_DATABASE_HOST: phpipam-mariadb
+      IPAM_DATABASE_NAME: phpipam
+      IPAM_DATABASE_USER: phpipam
+      IPAM_DATABASE_PASS: SenhaForte123
+    depends_on:
+      - phpipam-mariadb
+
+  phpipam-mariadb:
+    image: mariadb:11
+    environment:
+      MYSQL_ROOT_PASSWORD: RootSenha123
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_DATABASE: phpipam
+      MYSQL_USER: phpipam
+      MYSQL_PASSWORD: SenhaForte123
+    volumes:
+      - phpipam-db-data:/var/lib/mysql
+
+volumes:
+  phpipam-db-data:
